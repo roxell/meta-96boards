@@ -1,7 +1,7 @@
 DESCRIPTION = "ARM Trusted Firmware Juno"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://license.rst;md5=33065335ea03d977d0569f270b39603e"
-DEPENDS += "u-boot-juno zip-native"
+DEPENDS += "optee-os u-boot-juno zip-native"
 SRCREV = "b762fc7481c66b64eb98b6ff694d569e66253973"
 
 SRC_URI = "git://github.com/ARM-software/arm-trusted-firmware.git;protocol=https;name=atf;branch=master \
@@ -29,18 +29,25 @@ do_compile[depends] += "u-boot-juno:do_deploy"
 do_compile() {
     oe_runmake \
       CROSS_COMPILE=${TARGET_PREFIX} \
-      all \
-      fip \
-      PLAT=${COMPATIBLE_MACHINE} \
-      SPD=none \
       SCP_BL2=${WORKDIR}/juno-oe-uboot/SOFTWARE/scp_bl2.bin \
-      BL33=${DEPLOY_DIR_IMAGE}/u-boot.bin
+      BL32=${DEPLOY_DIR_IMAGE}/optee/tee-header_v2-juno-6d57389f.bin \
+      BL32_EXTRA1=${DEPLOY_DIR_IMAGE}/optee/tee-pager_v2-juno-6d57389f.bin \
+      BL32_EXTRA2=${DEPLOY_DIR_IMAGE}/optee/tee-pageable_v2-juno-6d57389f.bin \
+      BL33=${DEPLOY_DIR_IMAGE}/u-boot.bin \
+      DEBUG=0 \
+      ARM_TSP_RAM_LOCATION=dram \
+      PLAT=${COMPATIBLE_MACHINE} \
+      SPD=opteed \
+      all \
+      fip
 
     # Generate new FIP using our U-boot
     ./tools/fiptool/fiptool update \
       --nt-fw ${DEPLOY_DIR_IMAGE}/u-boot.bin \
       build/${COMPATIBLE_MACHINE}/release/fip.bin
 }
+
+PACKAGE_ARCH = "${MACHINE_ARCH}"
 
 # Ensure we deploy kernel/dtb before we create the recovery image.
 do_deploy[depends] += "virtual/kernel:do_deploy"
