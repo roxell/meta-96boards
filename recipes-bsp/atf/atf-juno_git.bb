@@ -2,7 +2,9 @@ DESCRIPTION = "ARM Trusted Firmware Juno"
 LICENSE = "BSD"
 LIC_FILES_CHKSUM = "file://license.rst;md5=33065335ea03d977d0569f270b39603e"
 DEPENDS += "optee-os u-boot-juno zip-native"
-SRCREV = "b762fc7481c66b64eb98b6ff694d569e66253973"
+SRCREV = "e83769c07bb09b7727a36389c9dd92096860637e"
+
+PV = "1.4+git${SRCPV}"
 
 SRC_URI = "git://github.com/ARM-software/arm-trusted-firmware.git;protocol=https;name=atf;branch=master \
     http://releases.linaro.org/members/arm/platforms/17.10/juno-latest-oe-uboot.zip;name=junofip;subdir=juno-oe-uboot \
