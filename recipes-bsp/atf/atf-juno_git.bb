@@ -5,10 +5,10 @@ DEPENDS += "optee-os u-boot-juno zip-native"
 SRCREV = "b762fc7481c66b64eb98b6ff694d569e66253973"
 
 SRC_URI = "git://github.com/ARM-software/arm-trusted-firmware.git;protocol=https;name=atf;branch=master \
-    http://releases.linaro.org/members/arm/platforms/17.04/juno-latest-oe-uboot.zip;name=junofip;subdir=juno-oe-uboot \
+    http://releases.linaro.org/members/arm/platforms/17.10/juno-latest-oe-uboot.zip;name=junofip;subdir=juno-oe-uboot \
 "
-SRC_URI[junofip.md5sum] = "12fc772de457930fc60e42bdde97eb0a"
-SRC_URI[junofip.sha256sum] = "be1a3f8b72a0dd98ba1bf9f4fd5415d3adca052c60b090c5dccc178588ec43bc"
+SRC_URI[junofip.md5sum] = "d15b67a3391e24fb5ff0fc154b09963b"
+SRC_URI[junofip.sha256sum] = "45ad41c7bfdcdd43213d0f764b73220564da558ddec7072a5a859ec2111f1f06"
 
 S = "${WORKDIR}/git"
 
@@ -38,6 +38,7 @@ do_compile() {
       ARM_TSP_RAM_LOCATION=dram \
       PLAT=${COMPATIBLE_MACHINE} \
       SPD=opteed \
+      CSS_USE_SCMI_SDS_DRIVER=1 \
       all \
       fip
 
